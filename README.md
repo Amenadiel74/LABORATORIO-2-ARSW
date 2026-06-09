@@ -1,64 +1,57 @@
-# BarrierSynch - Sincronización por Barrera
+# BarrierSynch - Barrier Synchronization
 
-**Autor:** Stiven Esneider Pardo Gutierrez
+**Author:** Stiven Esneider Pardo Gutierrez
 
-## Descripción
+## Description
 
-Proyecto Java de ejemplo sobre sincronización de hilos usando un mecanismo de barrera (`CountDownLatch`).
-Se lanzan N hilos que realizan una misma tarea a diferentes velocidades, y al final se calcula el
-promedio del tiempo de ejecución de todos ellos.
+A Java project demonstrating thread synchronization using a barrier mechanism (`CountDownLatch`).
+N threads are spawned that perform the same task at different speeds, and at the end, the average execution time of all threads is calculated.
 
-## Problema Original
+## Original Problem
 
-En la versión original, el hilo principal (`main`) iniciaba los N hilos con `start()` pero **no
-esperaba a que terminaran** antes de leer el resultado de cada uno. Como los hilos aún se estaban
-ejecutando, `getResultado()` devolvía `0`, dando un promedio incorrecto.
+In the original version, the main thread (`main`) started N threads with `start()` but **did not wait for them to finish** before reading the results of each one. Since the threads were still running, `getResultado()` returned `0`, resulting in an incorrect average.
 
-## Solución Aplicada: Sincronización por Barrera
+## Applied Solution: Barrier Synchronization
 
-Se utilizó `java.util.concurrent.CountDownLatch` como barrera:
+`java.util.concurrent.CountDownLatch` was used as a barrier:
 
-1. El `main` crea un `CountDownLatch(N)`.
-2. Cada `HiloProc`, al terminar su ejecución en `run()`, invoca `latch.countDown()`.
-3. El `main` llama a `latch.await()` después de iniciar los hilos, lo que bloquea su ejecución hasta
-   que el último hilo termine (cuando el contador llegue a 0).
-4. Solo entonces se calcula el promedio de los tiempos de ejecución.
+1. The `main` thread creates a `CountDownLatch(N)`.
+2. Each `HiloProc` invokes `latch.countDown()` upon finishing its execution in `run()`.
+3. The `main` thread calls `latch.await()` after starting the threads, which blocks its execution until the last thread finishes (when the count reaches 0).
+4. Only then is the average execution time calculated.
 
-### Archivos modificados
+### Modified Files
 
-- **`src/edu/eci/arsw/samples/HiloProc.java`**: Se agregó campo estático `CountDownLatch`, método
-  `setLatch()` y llamada a `latch.countDown()` al final de `run()`.
-- **`src/edu/eci/arsw/samples/Main.java`**: Se agregó creación del `CountDownLatch`, se pasa a los
-  hilos mediante `setLatch()`, y se añadió `latch.await()` antes del cálculo del promedio.
+- **`src/edu/eci/arsw/samples/HiloProc.java`**: Added static field `CountDownLatch`, method `setLatch()`, and the call to `latch.countDown()` at the end of `run()`.
+- **`src/edu/eci/arsw/samples/Main.java`**: Added creation of the `CountDownLatch`, passed it to threads via `setLatch()`, and added `latch.await()` before calculating the average.
 
-## Requisitos
+## Requirements
 
-- Java 6 o superior
-- javac y java en PATH
+- Java 6 or higher
+- javac and java on PATH
 
-## Compilación y Ejecución
+## Compilation and Execution
 
-### Desde la terminal
+### From Terminal
 
 ```bash
-cd BarrierSynch
+cd LABORATORIO-2-ARSW
 javac -d bin src/edu/eci/arsw/samples/*.java
 java -cp bin edu.eci.arsw.samples.Main
 ```
 
-### Desde Eclipse
+### From Eclipse
 
 1. File > Import > General > Existing Projects into Workspace
-2. Seleccionar la carpeta `BarrierSynch`
-3. Ejecutar `Main.java` con Run As > Java Application
+2. Select the `LABORATORIO-2-ARSW` folder
+3. Run `Main.java` with Run As > Java Application
 
-## Resultado Esperado
+## Expected Result
 
-El programa imprime el progreso de cada hilo y al final muestra un mensaje como:
+The program prints the progress of each thread and finally shows a message like:
 
 ```
 El tiempo promedio de la ejecucion fue de: 12345
 ```
 
-El valor debe ser un número positivo y realista (diferente de 0), reflejando el tiempo real
-que tomaron los hilos en completar su tarea.
+The value must be a realistic positive number (different from 0), reflecting the actual time the threads took to complete their task.
