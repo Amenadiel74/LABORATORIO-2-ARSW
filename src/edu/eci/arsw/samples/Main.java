@@ -2,8 +2,18 @@ package edu.eci.arsw.samples;
 
 import java.util.concurrent.CountDownLatch;
 
+/**
+ * Clase principal (Main) que orquesta el lanzamiento de múltiples hilos procesadores.
+ * Utiliza CountDownLatch para esperar a que finalicen todos los hilos antes de calcular
+ * y mostrar el tiempo promedio de ejecución.
+ */
 public class Main {
 
+	/**
+	 * Punto de entrada principal para el programa de sincronización por barrera.
+	 * @param args Argumentos de consola (no se utilizan).
+	 * @throws InterruptedException Si ocurre una interrupción mientras se espera en la barrera.
+	 */
 	public static void main(String[] args) throws InterruptedException {
 		int numHilos=20;
 		

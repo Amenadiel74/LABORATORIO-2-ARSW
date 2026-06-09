@@ -3,6 +3,10 @@ package edu.eci.arsw.samples;
 import java.util.Random;
 import java.util.concurrent.CountDownLatch;
 
+/**
+ * Representa un hilo procesador individual que simula la ejecución de una tarea en varias iteraciones.
+ * Utiliza un CountDownLatch compartido para notificar al hilo principal una vez que su tarea ha finalizado.
+ */
 public class HiloProc extends Thread{
 
 	int waitPeriod=0;
@@ -10,10 +14,18 @@ public class HiloProc extends Thread{
 	long resultado=0;
 	private static CountDownLatch latch;
 	
+	/**
+	 * Configura el pestillo de sincronización (CountDownLatch) compartido por todos los hilos.
+	 * @param l Pestillo de cuenta regresiva.
+	 */
 	public static void setLatch(CountDownLatch l) {
 		latch = l;
 	}
 	
+	/**
+	 * Constructor de HiloProc. Inicializa el identificador y calcula un período de espera aleatorio.
+	 * @param id Identificador único del hilo.
+	 */
 	public HiloProc(int id){
 		try {
 			Thread.sleep(10);
@@ -24,6 +36,10 @@ public class HiloProc extends Thread{
 		idHilo=id;
 	}
 	
+	/**
+	 * Método de ejecución del hilo. Realiza 10 iteraciones de simulación, calcula el tiempo total
+	 * transcurrido y decrementa el pestillo de sincronización CountDownLatch.
+	 */
 	public void run(){
 		int numit=10;
 		long startTime=System.currentTimeMillis();
@@ -41,6 +57,10 @@ public class HiloProc extends Thread{
 	
 	
 
+	/**
+	 * Obtiene el tiempo total en milisegundos que tomó la ejecución del hilo.
+	 * @return Tiempo de procesamiento en milisegundos.
+	 */
 	public long getResultado() {
 		return resultado;
 	}
